@@ -1,15 +1,28 @@
 <template>
 	<div id="app">
-		hej
+		<h1>LinkedIn Killer</h1>
+		<section>
+			Gameplan:
+			<ul>
+				<li> Hitta på vilken data vi behöver ha för en användare </li>
+				<li> Vilka komponenter behövs? Registrering i egen komponent</li>
+				<li> Skapa template+CSS för formuläret </li>
+			</ul>
+		</section>
+		<RegisterProfile />
 	</div>
 </template>
 
 <script>
+import RegisterProfile from './components/RegisterProfile';
 
 export default {
 	name: 'App',
-	components: {
+	data: () => ({
 
+	}),
+	components: {
+		RegisterProfile
 	}
 }
 </script>
