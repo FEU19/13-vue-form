@@ -36,11 +36,13 @@
 	<div class="form-group">
 		<label>Education and courses</label>
 		<input type="text" placeholder="Name of school or course"
-			v-model="inputEducation" />
-		<button @click="profile.education.push(inputEducation)">Save education</button>
+			v-model="inputEducation" :class="educationClass" />
+		<button @click="profile.education.push(inputEducation); inputEducation = '';"
+			:disabled="educationExist">Save education</button>
 		<div class="list">
 			<div v-for="edu in profile.education" :key="edu">
-				{{ edu }}
+				<span> {{ edu }} </span>
+				<button @click="removeEducation(edu)">Remove</button>
 			</div>
 		</div>
 	</div>
@@ -125,6 +127,25 @@ export default {
 		},
 		photoErrorMessage() {
 			return 'Please enter a valid URL'
+		},
+
+		educationExist() {
+			// Kontrollera om inputEducation finns i listan profile.education
+			return this.profile.education.find(
+				edu => edu.toLowerCase() == this.inputEducation.toLowerCase()
+			);
+			// object -> true
+			// undefined -> false
+		},
+		educationClass() {
+			return this.educationExist ? 'invalid' : '';
+		}
+	},
+	methods: {
+		removeEducation(education) {
+			this.profile.education = this.profile.education.filter(
+				edu => edu != education
+			);
 		}
 	}
 }
@@ -155,6 +176,18 @@ input.invalid { border-color: red; }
 	color: red;
 	font-size: 90%;
 }
+
+.list > div {
+	display: flex;
+	justify-content: space-between;
+	width: 20em;
+	border: 1px solid lightgray;
+}
+.list > div:hover {
+	background-color: beige;
+}
+
+
 
 
 </style>
