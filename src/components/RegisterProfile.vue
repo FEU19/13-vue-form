@@ -33,6 +33,18 @@
 		<span v-if="photoIsTouched && !photoIsValid" class="error"> {{ photoErrorMessage }}</span>
 	</div>
 
+	<div class="form-group">
+		<label>Education and courses</label>
+		<input type="text" placeholder="Name of school or course"
+			v-model="inputEducation" />
+		<button @click="profile.education.push(inputEducation)">Save education</button>
+		<div class="list">
+			<div v-for="edu in profile.education" :key="edu">
+				{{ edu }}
+			</div>
+		</div>
+	</div>
+
 	{{ profile }}
 </div>
 </template>
@@ -55,6 +67,7 @@ export default {
 			interestedIn: '',  // valfri
 			jobType: ''  // heltid, deltid eller timmar
 		},
+		inputEducation: '',  // det som användaren skriver i input-fältet
 		nameIsTouched: false,
 		mobileIsTouched: false,
 		emailIsTouched: false,
@@ -108,6 +121,7 @@ export default {
 		photoClass() {
 			if( !this.photoIsTouched ) return '';
 			return this.photoIsValid ? 'valid' : 'invalid';
+			// if( this.photoIsValid ) return 'valid'; else return 'invalid';
 		},
 		photoErrorMessage() {
 			return 'Please enter a valid URL'
