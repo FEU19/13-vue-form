@@ -21,13 +21,16 @@
 	<div class="form-group">
 		<label>Email</label>
 		<input type="text" placeholder="example@email.com"
-			v-model="profile.contactInformation.eMailAddress" />
+			v-model="profile.contactInformation.eMailAddress"
+			:class="emailClass" @blur.once="emailIsTouched = true" />
+		<span v-if="emailIsTouched && !emailIsValid" class="error"> {{ emailErrorMessage }}</span>
 	</div>
 
 	<div class="form-group">
 		<label>Photo URL</label>
 		<input type="text" placeholder="https://path.to/image.jpeg"
-			v-model="profile.photo" />
+			v-model="profile.photo" :class="photoClass" @blur.once="photoIsTouched = true" />
+		<span v-if="photoIsTouched && !photoIsValid" class="error"> {{ photoErrorMessage }}</span>
 	</div>
 
 	{{ profile }}
@@ -53,7 +56,9 @@ export default {
 			jobType: ''  // heltid, deltid eller timmar
 		},
 		nameIsTouched: false,
-		mobileIsTouched: false
+		mobileIsTouched: false,
+		emailIsTouched: false,
+		photoIsTouched: false
 	}),
 	computed: {
 		nameIsValid() {
@@ -81,6 +86,31 @@ export default {
 		},
 		mobileErrorMessage() {
 			return 'Your mobile number should have 10 characters';
+		},
+
+		emailIsValid() {
+			const email = this.profile.contactInformation.eMailAddress;
+			return email.length > 0 && email.includes('@');
+		},
+		emailClass() {
+			if( !this.emailIsTouched ) return '';
+			return this.emailIsValid ? 'valid' : 'invalid';
+		},
+		emailErrorMessage() {
+			return 'Please enter a valid email address';
+		},
+
+		photoIsValid() {
+			const photo = this.profile.photo.toLowerCase();
+			const correctEnding = photo.endsWith('png') || photo.endsWith('jpg') || photo.endsWith('jpeg');
+			return photo == '' || (photo.startsWith('https://') && correctEnding);
+		},
+		photoClass() {
+			if( !this.photoIsTouched ) return '';
+			return this.photoIsValid ? 'valid' : 'invalid';
+		},
+		photoErrorMessage() {
+			return 'Please enter a valid URL'
 		}
 	}
 }
