@@ -4,15 +4,18 @@
 	<div class="form-group">
 		<label>Name</label>
 		<input type="text" placeholder="Firstname Lastname"
-			v-model="profile.name" :class="nameClass" />
+			v-model="profile.name" :class="nameClass"
+			@blur.once="nameIsTouched = true" />
 		<!-- <button @click="profile.name = ''">Reset name</button> -->
-		<span v-if="!nameIsValid" class="error"> {{ nameErrorMessage }} </span>
+		<span v-if="nameIsTouched && !nameIsValid" class="error"> {{ nameErrorMessage }} </span>
 	</div>
 
 	<div class="form-group">
 		<label>Mobile number</label>
 		<input type="text" placeholder="(+46) 070-123 456"
-			v-model="profile.contactInformation.mobileNumber" />
+			v-model="profile.contactInformation.mobileNumber"
+			:class="mobileClass" @blur.once="mobileIsTouched = true" />
+		<span v-if="mobileIsTouched && !mobileIsValid" class="error"> {{ mobileErrorMessage }}</span>
 	</div>
 
 	<div class="form-group">
@@ -48,7 +51,9 @@ export default {
 			ageRequirementNeedsBetterName: '',  // kan vara viktig i vissa fall - över 18 för vissa jobb - valfri - kanske checkbox?
 			interestedIn: '',  // valfri
 			jobType: ''  // heltid, deltid eller timmar
-		}
+		},
+		nameIsTouched: false,
+		mobileIsTouched: false
 	}),
 	computed: {
 		nameIsValid() {
@@ -59,10 +64,23 @@ export default {
 			// 	return false;
 		},
 		nameClass() {
+			if( !this.nameIsTouched ) return '';
 			return this.nameIsValid ? 'valid' : 'invalid';
 		},
 		nameErrorMessage() {
 			return 'Please enter at least two characters.'
+		},
+
+		mobileIsValid() {
+			// If we want to validate with more precision, consider regular expressions.
+			return this.profile.contactInformation.mobileNumber.length >= 10;
+		},
+		mobileClass() {
+			if( !this.mobileIsTouched ) return '';
+			return this.mobileIsValid ? 'valid' : 'invalid';
+		},
+		mobileErrorMessage() {
+			return 'Your mobile number should have 10 characters';
 		}
 	}
 }
