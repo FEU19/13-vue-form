@@ -4,8 +4,9 @@
 	<div class="form-group">
 		<label>Name</label>
 		<input type="text" placeholder="Firstname Lastname"
-			v-model="profile.name" />
+			v-model="profile.name" :class="nameClass" />
 		<!-- <button @click="profile.name = ''">Reset name</button> -->
+		<span v-if="!nameIsValid" class="error"> {{ nameErrorMessage }} </span>
 	</div>
 
 	<div class="form-group">
@@ -48,7 +49,22 @@ export default {
 			interestedIn: '',  // valfri
 			jobType: ''  // heltid, deltid eller timmar
 		}
-	})
+	}),
+	computed: {
+		nameIsValid() {
+			return this.profile.name.length >= 2;
+			// if( this.profile.name.length >= 2 )
+			// 	return true;
+			// else
+			// 	return false;
+		},
+		nameClass() {
+			return this.nameIsValid ? 'valid' : 'invalid';
+		},
+		nameErrorMessage() {
+			return 'Please enter at least two characters.'
+		}
+	}
 }
 </script>
 
@@ -66,13 +82,17 @@ export default {
 	padding: 0.3em;
 	margin: 0.3em;
 }
-.form-group label, .form-group input { display: block; }
+.form-group label { display: block; }
 .form-group input {
 	width: 20em;
 }
 
-
-
+input.valid { border-color: green; }
+input.invalid { border-color: red; }
+.error {
+	color: red;
+	font-size: 90%;
+}
 
 
 </style>
