@@ -47,7 +47,9 @@
 		</div>
 	</div>
 
-	{{ profile }}
+	<button :disabled="!formIsValid" class="submit">Next step</button>
+
+	<!-- {{ profile }} -->
 </div>
 </template>
 
@@ -139,6 +141,10 @@ export default {
 		},
 		educationClass() {
 			return this.educationExist ? 'invalid' : '';
+		},
+
+		formIsValid() {
+			return this.nameIsValid && this.mobileIsValid && this.emailIsValid && this.photoIsValid;
 		}
 	},
 	methods: {
@@ -186,8 +192,14 @@ input.invalid { border-color: red; }
 .list > div:hover {
 	background-color: beige;
 }
-
-
+button.submit {
+	font-size: 1.1em;
+	padding: 0.5em 1em;
+}
+button.submit:disabled {
+	background-color: white;
+	color: lightgray;
+}
 
 
 </style>
